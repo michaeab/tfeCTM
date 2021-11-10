@@ -1,5 +1,5 @@
-function modelResponseStruct = computeResponse(obj,params,stimulusStruct,kernelStruct,varargin)
-% modelResponseStruct = computeResponse(obj,params,stimulusStruct,kernelStruct,varargin)
+function modelResponseStruct = computeResponse(obj,params,stimulusStruct,varargin)
+% modelResponseStruct = computeResponse(obj,params,stimulusStruct,varargin)
 %
 % Compute method for the quadratic color model.
 %
@@ -24,7 +24,6 @@ function modelResponseStruct = computeResponse(obj,params,stimulusStruct,kernelS
 p = inputParser; p.KeepUnmatched = true;
 p.addRequired('params',@isstruct);
 p.addRequired('stimulusStruct',@isstruct);
-p.addRequired('kernelStruct',@(x)(isempty(x) || isstruct(x)));
 p.addParameter('addNoise',false,@islogical);
 p.parse(params,stimulusStruct,kernelStruct,varargin{:});
 params = p.Results.params;
@@ -36,15 +35,13 @@ else
     params.fitting = false;
 end
 
-%% Get neural response from QCM model
-neuralResponse = tfeQCMForward(params,stimulusStruct.values);
+%% Get neural response from CTM model
+lagResponse = tfeCTMForward(params,stimulusStruct.values);
 
-%% Make the neural response structure
+%% Make the response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;
-modelResponseStruct.values = neuralResponse;
+modelResponseStruct.values = lagResponse;
 
-%% Optionally, convolve with a passed kernel
-modelResponseStruct = obj.applyKernel(modelResponseStruct,kernelStruct,varargin{:});
 
 %% Optional add noise
 if p.Results.addNoise

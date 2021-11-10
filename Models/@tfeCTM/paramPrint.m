@@ -20,16 +20,27 @@ params = p.Results.params;
 switch (p.Results.PrintType)
     case 'standard'
         switch obj.dimension
-            case 3
-                fprintf('Quadratic ellipsoid lengths: 1.00, %0.2f, %0.2f\n',params.Qvec(1),params.Qvec(2));
-                fprintf('Quadratic ellipsoid angles (degs): %0.1f, %0.1f %0.1f\n',params.Qvec(3),params.Qvec(4),params.Qvec(5));
             case 2
-                fprintf('Quadratic ellipse lengths: 1.00, %0.2f\n',params.Qvec(1));
-                fprintf('Quadratic ellipse angle (degs): %0.1f\n',params.Qvec(2));
+                if length(params) ==4
+                    fprintf('Mecanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL,params.weightS);
+                    fprintf('Exponential Params: Amplidute = %0.1f,Min Lag = %0.1f\n',params.amplitude,params.minLag);
+                elseif length(params) == 6
+                    fprintf('Mecanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
+                    fprintf('Mecanism Weights: M2 -- L %0.2f, S %0.2f\n',params.weightL_2,params.weightS_2);
+                else
+                    fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
+                end
+            case 3
+                if length(params) ==4
+                    fprintf('Mecanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
+                elseif length(params) == 6
+                    fprintf('Mecanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_1,params.weightM_1, params.weightS_1);
+                    fprintf('Mecanism Weights: M2 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_2,params.weightM_2, params.weightS_2);
+                else
+                    fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
+                end
         end
-        fprintf('CRF amplitude: %0.2f, CRF semi-saturation: %0.2f, CRF exponent: %0.2f\n',params.crfAmp,params.crfSemi,params.crfExponent);
-        fprintf('Exponential filter time constant: %0.2f\n',params.expFalloff);
-        fprintf('Offset constant: %0.2f\n',params.crfOffset);
+        fprintf('Exponential Params: Amplidute = %0.1f,Min Lag = %0.1f\n',params.amplitude,params.minLag);
         fprintf('\n');
     otherwise
         error('Unknown parameter print type passed')

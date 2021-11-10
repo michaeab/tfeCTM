@@ -13,35 +13,31 @@ p.addParameter('UseNoiseParam',false,@islogical);
 p.parse(params,varargin{:});
 params = p.Results.params;
 
-switch obj.dimension
-    case 3
+switch obj.numMechanism
+    case 1
         % Take the parameter structure into a vector
-        for i = 1:5
-            x(i) = params.Qvec(i);
-        end
-        x(6) = params.crfAmp;
-        x(7) = params.crfExponent;
-        x(8) = params.crfSemi;
-        x(9) = params.expFalloff;
-        x(10) = params.crfOffset;
+        
+        x(1) = params.weightL;
+        x(2) = params.weightS;
+        x(3) = params.amplitude;
+        x(4) = params.minLag;
+
         
         % Optional inclusion of noise
         if (p.Results.UseNoiseParam)
-            x(11) = params.noiseSd;
+            x(5) = params.noiseSd;
         end
     case 2
-        for i = 1:2
-            x(i) = params.Qvec(i);
-        end
-        x(3) = params.crfAmp;
-        x(4) = params.crfExponent;
-        x(5) = params.crfSemi;
-        x(6) = params.expFalloff;
-        x(7) = params.crfOffset;
+        x(1) = params.weightL_1;
+        x(2) = params.weightS_1;
+        x(3) = params.weightL_2;
+        x(4) = params.weightS_2;
+        x(5) = params.amplitude;
+        x(6) = params.minLag;
         
         % Optional inclusion of noise
         if (p.Results.UseNoiseParam)
-            x(8) = params.noiseSd;
+            x(7) = params.noiseSd;
         end
 end
 

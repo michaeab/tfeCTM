@@ -25,18 +25,12 @@ p = inputParser; p.KeepUnmatched = true;
 p.addRequired('params',@isstruct);
 p.addRequired('stimulusStruct',@isstruct);
 p.addParameter('addNoise',false,@islogical);
-p.parse(params,stimulusStruct,kernelStruct,varargin{:});
+p.parse(params,stimulusStruct,varargin{:});
 params = p.Results.params;
 
-%% Fitting?
-if (obj.fitting)
-    params.fitting = true;
-else
-    params.fitting = false;
-end
 
 %% Get neural response from CTM model
-lagResponse = tfeCTMForward(params,stimulusStruct.values);
+lagResponse = tfeCTMForward(obj.paramsToVec(params),stimulusStruct.values);
 
 %% Make the response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;

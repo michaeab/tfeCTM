@@ -43,46 +43,17 @@ p = inputParser; p.KeepUnmatched = true; p.PartialMatching = false;
 p.addRequired('thePacket',@isstruct);
 p.addParameter('initialParams',[],@(x)(isempty(x) | isstruct(x)));
 p.addParameter('fitErrorScalar',1000,@isnumeric);
-p.addParameter('fminconAlgorithm','interior-point',@(x) (isempty(x) | ischar(x)));
+p.addParameter('fminconAlgorithm','active-set',@(x) (isempty(x) | ischar(x)));
 p.parse(thePacket,varargin{:});
 
 %% Initial parameters
 [initialParams,vlbParams,vubParams] = obj.defaultParams;
 if (~isempty(p.Results.initialParams))
     initialParams = p.Results.initialParams;
-end
-      
-%% Locked Naka-Rushton parameters
-if (~isempty(obj.lockedCrfAmp))
-    initialParams.crfAmp = obj.lockedCrfAmp;
-    vlbParams.crfAmp = obj.lockedCrfAmp;
-    vubParams.crfAmp = obj.lockedCrfAmp;
-end
-if (~isempty(obj.lockedCrfExponent))
-    initialParams.crfExponent = obj.lockedCrfExponent;
-    vlbParams.crfExponent = obj.lockedCrfExponent;
-    vubParams.crfExponent = obj.lockedCrfExponent;
-end
-if (~isempty(obj.lockedCrfSemi))
-    initialParams.crfSemi = obj.lockedCrfSemi;
-    vlbParams.crfSemi = obj.lockedCrfSemi;
-    vubParams.crfSemi = obj.lockedCrfSemi;
-end
-if (~isempty(obj.lockedCrfOffset))
-    initialParams.crfOffset = obj.lockedCrfOffset;
-    vlbParams.crfOffset = obj.lockedCrfOffset;
-    vubParams.crfOffset= obj.lockedCrfOffset;
-end
+end   
          
 % Some custom fitting
 if (obj.dimension == 2)
-    
-    % Lock angle?
-    if (~isempty(obj.lockedAngle))
-        initialParams.Qvec(2) = obj.lockedAngle;
-        vlbParams.Qvec(2) = obj.lockedAngle;
-        vubParams.Qvec(2) = obj.lockedAngle;
-    end
     
     % Setting the fitting flag allows the eventually called
     % computeResponse routine to take some shortcuts that we
@@ -91,40 +62,12 @@ if (obj.dimension == 2)
     % flag back to false.  The computeResponse routine will compute it when
     % the fitting flag is true and it is empty.
     obj.fitting = true; obj.stimuli = [];
-    [paramsFit1,fVal1,modelResponseStruct1] = fitResponse@tfe(obj,thePacket,varargin{:},...
+    [paramsFit,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:},...
         'initialParams',initialParams,'vlbParams',vlbParams,'vubParams',vubParams,...
-        'fitErrorScalar',p.Results.fitErrorScalar);
+        'fitErrorScalar',p.Results.fitErrorScalar,'fminconAlgorithm',p.Results.fminconAlgorithm);
     obj.fitting = false;
     obj.stimuli = [];
-
-    % Perturb angle by 90 degrees and fit again
-    initialParams.Qvec(2) = initialParams.Qvec(2)-90;
-    obj.fitting = true; obj.stimuli = [];
-    [paramsFit2,fVal2,modelResponseStruct2] = fitResponse@tfe(obj,thePacket,varargin{:},...
-        'initialParams',initialParams,'vlbParams',vlbParams,'vubParams',vubParams,...
-        'fminconAlgorithm',p.Results.fminconAlgorithm,...
-        'fitErrorScalar',p.Results.fitErrorScalar);
-    obj.fitting = false; obj.stimuli = [];
-
-    % Pick the winner
-    if (fVal1 <= fVal2)
-        paramsFit = paramsFit1;
-        fVal = fVal1;
-        modelResponseStruct = modelResponseStruct1;
-    else
-        paramsFit = paramsFit2;
-        fVal = fVal2;
-        modelResponseStruct = modelResponseStruct2;
-    end
-    
    
-    % Put angle into canonical range
-    if  (paramsFit.Qvec(2) < -90)
-        paramsFit.Qvec(2) = paramsFit.Qvec(2) + 180;
-    elseif (paramsFit.Qvec(2) > 90)
-        paramsFit.Qvec(2) = paramsFit.Qvec(2) - 180;
-    end
-    
     % Use this to check error value as it sits here
     fValCheck = obj.fitError(obj.paramsToVec(paramsFit),thePacket,varargin{:},'fitErrorScalar',p.Results.fitErrorScalar);
     if (fValCheck ~= fVal)

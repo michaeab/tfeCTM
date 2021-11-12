@@ -13,10 +13,8 @@ function [params,paramsLb,paramsUb] = defaultParams(obj,varargin)
 %                          parameters.
 %
 % History:
-%   11/20/18  dhb, mab     Keep minor axis smaller than major in limits,
-%                          for first two. 
-%   11/24/18  dhb          Don't use degenerate default ellipse parameters.
-%   12/09/18  dhb          For two-dimensional model, angle in range [-90,90]
+%   11/11/21    mab        changed over for the CTM params
+
 
 % Parse vargin for options passed here
 p = inputParser; p.KeepUnmatched = true;
@@ -24,68 +22,60 @@ p.addParameter('defaultParams',[],@(x)(isempty(x) | isstruct(x)));
 p.parse(varargin{:});
 
 if (isempty(p.Results.defaultParams))
-    %% Default parameters for Q
+    %% Default parameters for linear mechanisms
     %
     % This is dimension specific
-    switch obj.dimension
-        case 3
-            % Quadratic parameters
-            %
-            % We only store 5 because we handle the amplitude of the response
-            % in the amplitude parameter below.  The first axis of the ellipse
-            % has an implicit value of 1.
-            params.Qvec = [0.5 0.25 0 0 0];
+    switch obj.numMechanism
+        case 1
+            params.weightL   = 75.3925;
+            params.weightS   = 2.0741;
+            
+            
             
         case 2
-            params.Qvec = [0.5 0];
+            params.weightL_1 = 75.3925 ;
+            params.weightS_1 = 2.0741;
+            params.weightL_2 = 24.6311;
+            params.weightS_2 = 2.8620;
+
+            
     end
     
-    %% The Naka-Rushton
-    params.crfAmp = 1;
-    params.crfSemi = 1;
-    params.crfExponent = 2;
-    params.crfOffset = 0;
-    
-    % Exponential falloff (not used?)
-    params.expFalloff = 0.3;
-    
-    % Noise level (used for simulations)
-    params.noiseSd = 0.2;
+    %% The exponential function
+    params.amplitude = 0.5315;
+    params.minLag    = 0.3093;
     
 else
     params = p.Results.defaultParams;
 end
 
-switch obj.dimension
-    case 3
-        % Quadratic parameters
-        %
-        % We only store 5 because we handle the amplitude of the response
-        % in the amplitude parameter below.  The first axis of the ellipse
-        % has an implicit value of 1.  We want that to be the major axis,
-        % so we bound the other axes at 1.
-        paramsLb.Qvec = [1e-2 1e-2 -360 -360 -360];
-        paramsUb.Qvec = [1 1 360 360 360];
-           
+switch obj.numMechanism
+    case 1
+        paramsLb.weightL   = 0;
+        paramsLb.weightS   = 0;
+        
+        paramsUb.weightL  = 100;
+        paramsUb.weightS  = 100;
     case 2
-        paramsLb.Qvec = [1e-2 -180];
-        paramsUb.Qvec = [1 180];
+        paramsLb.weightL_1 = 0;
+        paramsLb.weightS_1 = 0;
+        paramsLb.weightL_2 = 0;
+        paramsLb.weightS_2 = 0;
+        
+        paramsUb.weightL_1 = 100;
+        paramsUb.weightS_1 = 100;
+        paramsUb.weightL_2 = 100;
+        paramsUb.weightS_2 = 100;
 end
 
 %% Lower bounds
-paramsLb.crfAmp = 1e-1;
-paramsLb.crfSemi = 1e-2;
-paramsLb.crfExponent = 1e-2;
-paramsLb.expFalloff = 1e-1;
-paramsLb.noiseLevel = 0;
-paramsLb.crfOffset = -2;
+paramsLb.amplitude = 0;
+paramsLb.minLag    = 0.15;
+
 
 %% Upper bounds
-paramsUb.crfAmp = 3;
-paramsUb.crfSemi = 1e2 ;
-paramsUb.crfExponent = 10;
-paramsUb.expFalloff = 1e1;
-paramsUb.noiseLevel = 100;
-paramsUb.crfOffset = 2;
+paramsUb.amplitude = 10;
+paramsUb.minLag    = 1;
+
 
 end

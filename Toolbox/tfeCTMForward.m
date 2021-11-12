@@ -26,17 +26,17 @@ function [lagsFromParams] = tfeCTMForward(params,stimuli)
 % end
 
 %% Get the ellipsoid parameters in cannonical form
-dimension = size(stimuli,2);
+dimension = size(stimuli,1);
 if (dimension == 2)
     % Loop over the number of mechaisms
     
-    for ii = (size(params,1)-2)/2;
+    for ii = 1:(size(params,1)-2)/2;
         
         % Get the weight linear mechanism output
-        m_hat = params((2*ii)-1).*stimuli(:,1) - params(2*ii).*stimuli(:,2);
+        m_hat = params((2*ii)-1).*stimuli(1,:) - params(2*ii).*stimuli(2,1);
         
         % Convert mechanism output to lags
-        Lag_hat(:,ii) =  params(end-1) +  params(end).* exp(-1.*m_hat);
+        Lag_hat(ii,:) =  params(end-1) +  params(end).* exp(-1.*m_hat);
     end
 elseif (dimension == 3)
     % Loop over the number of mechaisms
@@ -52,7 +52,7 @@ else
 end
 
 %% Take the min of the lags
-lagsFromParams = min(Lag_hat,[],2);
+lagsFromParams = min(Lag_hat,[],1);
 
 
 

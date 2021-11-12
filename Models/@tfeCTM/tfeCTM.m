@@ -50,17 +50,11 @@ classdef tfeCTM < tfe
 
     % Public, read-only properties.
     properties (SetAccess = protected, GetAccess = public)
-        % Specify dimension of ellipsoid.  Can be 2 or 3.
+        % Specify dimension of cone contrast space.  Can be 2 or 3.
         dimension = 3;
         
-        % Locked angle (if dimension is 2)
-        lockedAngle = [];
-        
-        % Locked Naka-Rushton parameters
-        lockedCrfAmp = [];
-        lockedCrfExponent = [];
-        lockedCrfSemi = [];
-        lockedCrfOffset = [];
+        % Specify number of mechanisms.  Can be 1 or 2.
+        numMechanism = 1;
         
         % Flag as to whether we are fitting.  For very careful use as a way
         % of communicating when we can save some time during fitting.
@@ -91,11 +85,7 @@ classdef tfeCTM < tfe
             p = inputParser; p.KeepUnmatched = true;
             p.addParameter('verbosity','none',@ischar);
             p.addParameter('dimension',3,@(x) (isnumeric(x) & isscalar(x)));
-            p.addParameter('lockedAngle',[],@isnumeric);
-            p.addParameter('lockedCrfAmp',[],@isnumeric);
-            p.addParameter('lockedCrfExponent',[],@isnumeric);
-            p.addParameter('lockedCrfSemi',[],@isnumeric);
-            p.addParameter('lockedCrfOffset',[],@isnumeric);
+            p.addParameter('numMechanism',1,@(x) (isnumeric(x) & isscalar(x)));
             p.parse(varargin{:});
             
             % Base class constructor
@@ -106,16 +96,12 @@ classdef tfeCTM < tfe
             if (obj.dimension ~= 2 & obj.dimension ~= 3)
                 error('Can only handle dimension 2 or 3');
             end
-            
-            % Set locks
-            obj.lockedAngle = p.Results.lockedAngle;
-            if (~isempty(obj.lockedAngle) & obj.dimension ~= 2)
-                error('Locking angle only works for dimension 2');
+            % Set number of mechanisms 
+            obj.numMechanism = p.Results.numMechanism;
+            if (obj.numMechanism ~= 1 & obj.numMechanism ~= 2)
+                error('Can only handle 1 or 2 mechanisms');
             end
-            obj.lockedCrfAmp = p.Results.lockedCrfAmp;
-            obj.lockedCrfExponent = p.Results.lockedCrfExponent;
-            obj.lockedCrfSemi = p.Results.lockedCrfSemi;
-            obj.lockedCrfOffset = p.Results.lockedCrfOffset;
+
         end
     end 
     

@@ -21,32 +21,14 @@ classdef tfeCTM < tfe
 %    obj         - The object.
 %
 % Optional key/value pairs:
-%    'dimension' - The dimension of the ellipsoid. Can be 2 or 3. Default
-%                  3.
-%    'lockedAngle' - If dimension is 2, this specifies the angle of the
-%                    ellipse, and this angle is not searched over. Default
-%                    is empty, which means angle is searched over.
-%    'lockedCrfAmp' - If value set, this is used as the amplitude of the
-%                    Naka-Rrushton function, and that is not searched over.
-%                    Default is empty, which means search.
-%    'lockedCrfExponent' - If value set, this is used as the exponent of
-%                    the Naka-Rushton function, and that is not searched
-%                    over. Default is empty, which means search.
-
-%    'lockedCrfSemi' - If value set, this is used as the semi-saturation
-%                    constant of the Naka-Rushton function, and that is not
-%                    searched over. Default is empty, which means search.
-
-%    'lockedCrfOffset' - If value set, this is used as the offset of
-%                    the Naka-Rushton function, and that is not searched
-%                    over. Default is empty, which means search.
-%
+%    'dimension'    - The dimension of the ellipsoid. Can be 2 or 3. Default
+%                     3.
+%    'numMechanism' - The number of linear mechanisms
 % See also:
 %
 
 % History:
-%   06/26/16 dhb       Started in on this.
-%   08/24/18 dhb, mab  Get key/value dimension pair working.
+%   11/12/21 mab       Swapped over to the tfeCTM from the tfeQCM
 
     % Public, read-only properties.
     properties (SetAccess = protected, GetAccess = public)

@@ -19,9 +19,10 @@ switch obj.numMechanism
         
         x(1) = params.weightL;
         x(2) = params.weightS;
-        x(3) = params.amplitude;
-        x(4) = params.minLag;
-
+        x(3) = params.minLag;
+        x(4) = params.amplitude;
+        
+        
         
         % Optional inclusion of noise
         if (p.Results.UseNoiseParam)
@@ -32,8 +33,8 @@ switch obj.numMechanism
         x(2) = params.weightS_1;
         x(3) = params.weightL_2;
         x(4) = params.weightS_2;
-        x(5) = params.amplitude;
-        x(6) = params.minLag;
+        x(5) = params.minLag;
+        x(6) = params.amplitude;
         
         % Optional inclusion of noise
         if (p.Results.UseNoiseParam)

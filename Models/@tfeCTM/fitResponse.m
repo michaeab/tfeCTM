@@ -65,8 +65,8 @@ if (obj.dimension == 2)
     [paramsFit,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:},...
         'initialParams',initialParams,'vlbParams',vlbParams,'vubParams',vubParams,...
         'fitErrorScalar',p.Results.fitErrorScalar,'fminconAlgorithm',p.Results.fminconAlgorithm);
-    obj.fitting = false;
-    obj.stimuli = [];
+    %obj.fitting = false;
+    %obj.stimuli = [];
    
     % Use this to check error value as it sits here
     fValCheck = obj.fitError(obj.paramsToVec(paramsFit),thePacket,varargin{:},'fitErrorScalar',p.Results.fitErrorScalar);

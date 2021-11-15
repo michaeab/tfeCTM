@@ -30,19 +30,19 @@ dimension = size(stimuli,1);
 if (dimension == 2)
     % Loop over the number of mechaisms
     
-    for ii = 1:(size(params,1)-2)/2;
+    for ii = 1:(size(params,1)-2)/2
         
         % Get the weight linear mechanism output
-        m_hat = params((2*ii)-1).*stimuli(1,:) - params(2*ii).*stimuli(2,:);
+        m_hat = abs(params((2*ii)-1).*stimuli(1,:) - params(2*ii).*stimuli(2,:));
         
         % Convert mechanism output to lags
         Lag_hat(ii,:) =  params(end-1) +  params(end).* exp(-1.*m_hat);
     end
 elseif (dimension == 3)
     % Loop over the number of mechaisms
-    for ii = (size(params,1)-2)/2;
+    for ii = (size(params,1)-2)/2
         % Get the weight linear mechanism output
-        m_hat = params((3*ii)-2).*stimuli(1,:) - params((3*ii)-1).*stimuli(2,:) - params(3*ii).*stimuli(3,:);
+        m_hat = abs(params((3*ii)-2).*stimuli(1,:) - params((3*ii)-1).*stimuli(2,:) - params(3*ii).*stimuli(3,:));
         
         % Convert mechanism output to lags
         Lag_hat(:,ii) =  params(end-1) +  params(end).* exp(-1.*m_hat);

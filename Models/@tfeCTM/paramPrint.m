@@ -21,26 +21,25 @@ switch (p.Results.PrintType)
     case 'standard'
         switch obj.dimension
             case 2
-                if length(fieldnames(params)) ==4
-                    fprintf('Mecanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL,params.weightS);
-                    fprintf('Exponential Params: Amplidute = %0.1f,Min Lag = %0.1f\n',params.amplitude,params.minLag);
+                if length(fieldnames(params)) == 4
+                    fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL,params.weightS);
                 elseif length(fieldnames(params)) == 6
-                    fprintf('Mecanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
-                    fprintf('Mecanism Weights: M2 -- L %0.2f, S %0.2f\n',params.weightL_2,params.weightS_2);
+                    fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
+                    fprintf('Mechanism Weights: M2 -- L %0.2f, S %0.2f\n',params.weightL_2,params.weightS_2);
                 else
                     fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
                 end
             case 3
                 if length(fieldnames(params)) ==4
-                    fprintf('Mecanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
+                    fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
                 elseif length(fieldnames(params)) == 6
-                    fprintf('Mecanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_1,params.weightM_1, params.weightS_1);
-                    fprintf('Mecanism Weights: M2 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_2,params.weightM_2, params.weightS_2);
+                    fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_1,params.weightM_1, params.weightS_1);
+                    fprintf('Mechanism Weights: M2 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_2,params.weightM_2, params.weightS_2);
                 else
                     fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
                 end
         end
-        fprintf('Exponential Params: Amplitude = %0.1f,Min Lag = %0.1f\n',params.amplitude,params.minLag);
+        fprintf('Exponential Params: Amplitude = %0.2f,Min Lag = %0.2f\n',params.amplitude,params.minLag);
         fprintf('\n');
     otherwise
         error('Unknown parameter print type passed')

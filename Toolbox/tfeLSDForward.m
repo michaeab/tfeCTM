@@ -1,4 +1,4 @@
-function [lagsFromParams] = tfeCTMForward(params,stimuli)
+function [pcFromParams] = tfeCTMForward(params,stimuli)
 % Compute CTM forward model
 %
 % Synopsis
@@ -36,7 +36,7 @@ if (dimension == 2)
         m_hat = abs(params((2*ii)-1).*stimuli(1,:) - params(2*ii).*stimuli(2,:));
         
         % Convert mechanism output to lags
-        Lag_hat(ii,:) =  params(end-1) +  params(end).* exp(-1.*m_hat);
+        pc_hat(ii,:) =  1-exp((m_hat./params(end-1)).^params(end));
     end
 elseif (dimension == 3)
     % Loop over the number of mechaisms
@@ -45,14 +45,14 @@ elseif (dimension == 3)
         m_hat = abs(params((3*ii)-2).*stimuli(1,:) + params((3*ii)-1).*stimuli(2,:) + params(3*ii).*stimuli(3,:));
         
         % Convert mechanism output to lags
-        Lag_hat(:,ii) =  params(end-1) +  params(end).* exp(-1.*m_hat);
+        pc_hat(ii,:) =  1-exp((m_hat./params(end-1)).^params(end));
     end
 else
     error('Dimension must be 2 or 3');
 end
 
 %% Take the min of the lags
-lagsFromParams = min(Lag_hat,[],1);
+pcFromParams = max(pc_hat,[],1);
 
 
 

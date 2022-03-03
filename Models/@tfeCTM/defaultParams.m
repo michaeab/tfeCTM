@@ -35,10 +35,7 @@ if (isempty(p.Results.defaultParams))
         case 2
             params.weightL_1 = 75;
             params.weightS_1 = 02;
-            params.weightL_2 = 24;
-            params.weightS_2 = 02;
-
-            
+            params.weight_M2 = 1;
     end
     
     %% The exponential function
@@ -59,13 +56,12 @@ switch obj.numMechanism
     case 2
         paramsLb.weightL_1 = -100;
         paramsLb.weightS_1 = -100;
-        paramsLb.weightL_2 = -100;
-        paramsLb.weightS_2 = -100;
-        
+        paramsLb.weight_M2 = -10;
+
         paramsUb.weightL_1 = 100;
         paramsUb.weightS_1 = 100;
-        paramsUb.weightL_2 = 100;
-        paramsUb.weightS_2 = 100;
+        paramsUb.weight_M2 = 10;
+
 end
 
 %% Lower bounds

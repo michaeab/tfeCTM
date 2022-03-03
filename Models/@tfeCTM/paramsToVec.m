@@ -31,14 +31,13 @@ switch obj.numMechanism
     case 2
         x(1) = params.weightL_1;
         x(2) = params.weightS_1;
-        x(3) = params.weightL_2;
-        x(4) = params.weightS_2;
-        x(5) = params.minLag;
-        x(6) = params.amplitude;
+        x(3) = params.weight_M2;
+        x(4) = params.minLag;
+        x(5) = params.amplitude;
         
         % Optional inclusion of noise
         if (p.Results.UseNoiseParam)
-            x(7) = params.noiseSd;
+            x(6) = params.noiseSd;
         end
 end
 

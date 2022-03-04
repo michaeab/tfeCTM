@@ -65,7 +65,7 @@ switch obj.numMechanism
 end
 
 %% Lower bounds
-paramsLb.amplitude = 0;
+paramsLb.amplitude = 0.0;
 paramsLb.minLag    = 0.15;
 
 

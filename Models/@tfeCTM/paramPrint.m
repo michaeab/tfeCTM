@@ -25,6 +25,9 @@ switch (p.Results.PrintType)
                     fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL,params.weightS);
                 elseif length(fieldnames(params)) == 5
                     fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
+                    fprintf('Mechanism Weights: M2 -- M Scalar %0.2f\n',params.weight_M2);
+                elseif length(fieldnames(params)) == 6
+                    fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
                     fprintf('Mechanism Weights: M2 -- L %0.2f, S %0.2f\n',params.weightL_2,params.weightS_2);
                 else
                     fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
@@ -33,6 +36,9 @@ switch (p.Results.PrintType)
                 if length(fieldnames(params)) ==4
                     fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
                 elseif length(fieldnames(params)) == 5
+                    fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
+                    fprintf('Mechanism Weights: M2 -- M Scalar %0.2f\n',params.weight_M2);
+                elseif length(fieldnames(params)) == 6
                     fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_1,params.weightM_1, params.weightS_1);
                     fprintf('Mechanism Weights: M2 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_2,params.weightM_2, params.weightS_2);
                 else

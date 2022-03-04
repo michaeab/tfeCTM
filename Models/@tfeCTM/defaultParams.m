@@ -33,14 +33,14 @@ if (isempty(p.Results.defaultParams))
             
             
         case 2
-            params.weightL_1 = 75;
-            params.weightS_1 = 02;
-            params.weight_M2 = 1;
+            params.weightL_1 = 50;
+            params.weightS_1 = 03;
+            params.weight_M2 = 0.5;
     end
     
     %% The exponential function
-    params.amplitude = 0.5;
-    params.minLag    = 0.3;
+    params.amplitude = 0.4;
+    params.minLag    = 0.35;
     
 else
     params = p.Results.defaultParams;
@@ -70,7 +70,7 @@ paramsLb.minLag    = 0.15;
 
 
 %% Upper bounds
-paramsUb.amplitude = 10;
+paramsUb.amplitude = 1;
 paramsUb.minLag    = 1;
 
 

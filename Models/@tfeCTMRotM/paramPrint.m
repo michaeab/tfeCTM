@@ -24,7 +24,7 @@ switch (p.Results.PrintType)
                 if length(fieldnames(params)) == 4
                     fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL,params.weightS);
                 elseif length(fieldnames(params)) == 5
-                    fprintf('Mechanism Angle: L %0.2f, MAR: %0.2f, Scale: %0.2f\n',params.angle,params.minAxisRatio,params.scale);
+                    fprintf('Mechanism Angle: %0.2f, MAR: %0.2f, Scale: %0.2f\n',params.angle,params.minAxisRatio,params.scale);
                 elseif length(fieldnames(params)) == 6
                     fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
                     fprintf('Mechanism Weights: M2 -- L %0.2f, S %0.2f\n',params.weightL_2,params.weightS_2);

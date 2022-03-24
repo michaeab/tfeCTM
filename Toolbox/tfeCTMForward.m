@@ -31,10 +31,10 @@ if (dimension == 2)
     %The one mechanism model
    if length(params) == 4
         % Get the weight linear mechanism output
-        m_hats = abs(params(1).*stimuli(1,:) - params(2).*stimuli(2,:));
+        m_hats = abs(params(1).*stimuli(1,:) + params(2).*stimuli(2,:));
    elseif  length(params) == 5
-        m_mech1 = abs(params(1).*stimuli(1,:) - params(2).*stimuli(2,:));
-        m_mech2 = abs(params(3).* params(2).*stimuli(1,:) + params(3).*params(1).*stimuli(2,:));
+        m_mech1 = abs(params(1).*stimuli(1,:) + params(2).*stimuli(2,:));
+        m_mech2 = abs(params(3).* params(2).*stimuli(1,:) - params(3).*params(1).*stimuli(2,:));
         
         m_hats = [m_mech1;m_mech2];
    else

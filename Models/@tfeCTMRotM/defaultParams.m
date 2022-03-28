@@ -29,9 +29,6 @@ if (isempty(p.Results.defaultParams))
         case 1
             params.weightL   = 75;
             params.weightS   = 02;
-            
-            
-            
         case 2
             params.angle = 80;
             params.minAxisRatio = 0.03;

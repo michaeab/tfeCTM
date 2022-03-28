@@ -33,8 +33,8 @@ if (isempty(p.Results.defaultParams))
             
             
         case 2
-            params.weightL_1 = 50;
-            params.weightS_1 = 03;
+            params.weightL_1 = 5;
+            params.weightS_1 = 5;
             params.weight_M2 = 0.5;
     end
     
@@ -54,13 +54,13 @@ switch obj.numMechanism
         paramsUb.weightL  = 100;
         paramsUb.weightS  = 100;
     case 2
-        paramsLb.weightL_1 = -100;
+        paramsLb.weightL_1 = 0;
         paramsLb.weightS_1 = -100;
-        paramsLb.weight_M2 = -10;
+        paramsLb.weight_M2 = 0.0000001;
 
         paramsUb.weightL_1 = 100;
         paramsUb.weightS_1 = 100;
-        paramsUb.weight_M2 = 10;
+        paramsUb.weight_M2 = 0.9999999;
 
 end
 
@@ -70,7 +70,7 @@ paramsLb.minLag    = 0.15;
 
 
 %% Upper bounds
-paramsUb.amplitude = 1;
+paramsUb.amplitude = 10;
 paramsUb.minLag    = 1;
 
 

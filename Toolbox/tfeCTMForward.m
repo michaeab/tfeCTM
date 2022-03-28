@@ -33,8 +33,8 @@ if (dimension == 2)
         % Get the weight linear mechanism output
         m_hats = abs(params(1).*stimuli(1,:) + params(2).*stimuli(2,:));
    elseif  length(params) == 5
-        m_mech1 = abs(params(1).*stimuli(1,:) + params(2).*stimuli(2,:));
-        m_mech2 = abs(params(3).* params(2).*stimuli(1,:) - params(3).*params(1).*stimuli(2,:));
+        m_mech1 = params(1).*stimuli(1,:) + params(2).*stimuli(2,:);
+        m_mech2 = params(3).* params(2).*stimuli(1,:) - params(3).*params(1).*stimuli(2,:);
         
         m_hats = [m_mech1;m_mech2];
    else
@@ -42,7 +42,7 @@ if (dimension == 2)
    end
     
     % take the max of the mechanism outputs
-    m_Max = max(m_hats,[],1);
+    m = vecnorm(m_hats);
 elseif (dimension == 3)
     % Loop over the number of mechaisms
     for ii = (size(params,1)-2)/2
@@ -51,13 +51,13 @@ elseif (dimension == 3)
     end
     
     % take the max of the mechanism outputs
-    m_Max = max(m_hats,[],1);
+    m = vecnorm(m_hats);
 else
     error('Dimension must be 2 or 3');
 end
 
 % Convert mechanism output to lags
-lagsFromParams =  params(end-1) +  params(end).* exp(-1.*m_Max);
+lagsFromParams =  params(end-1) +  params(end).* exp(-1.*m);
 
 
 

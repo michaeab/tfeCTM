@@ -36,14 +36,14 @@ if (dimension == 2)
         R = deg2rotm(params(1));
         E = [1 0; 0 params(2)];
 
-        m_hats = abs((R*E)'*stimuli);
+        m_hats = (R*E)'*stimuli;
 
     else
         error('Must be either 1 or 2 mechanisms');
     end
 
     % take the max of the mechanism outputs
-    m_Max = max(m_hats,[],1);
+    m = vecnorm(m_hats);
 elseif (dimension == 3)
     error('3 Dimension case to come');
 else
@@ -51,7 +51,7 @@ else
 end
 
 % Convert mechanism output to lags
-lagsFromParams =  params(end-1) +  params(end).* exp(-1.*m_Max.*params(3));
+lagsFromParams =  params(end-1) +  params(end).* exp(-1*m.*params(3));
 
 
 

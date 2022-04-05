@@ -30,7 +30,7 @@ params = p.Results.params;
 
 
 %% Get neural response from CTM model
-lagResponse = tfeCTMRotMForward(obj.paramsToVec(params),stimulusStruct.values);
+lagResponse = tfeCTMRotMForward(obj.paramsToVec(params),stimulusStruct.values,'dimension',obj.dimension,'numMechanisms',obj.numMechanism);
 
 %% Make the response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;

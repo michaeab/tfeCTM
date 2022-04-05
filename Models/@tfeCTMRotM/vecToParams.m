@@ -18,15 +18,15 @@ x = p.Results.x;
 switch obj.numMechanism
     case 1
         
-        params.weightL   = x(1);
-        params.weightS   = x(2);
-        params.minLag    = x(3);
-        params.amplitude = x(4);
-        
+        params.angle        = x(1);
+        params.minAxisRatio = x(2);
+        params.scale        = x(3);
+        params.minLag       = x(4);
+        params.amplitude    = x(5);
         
         % Optional inclusion of noise
         if (p.Results.UseNoiseParam)
-            params.noiseSd = x(5);
+            params.noiseSd = x(6);
         end
         
     case 2

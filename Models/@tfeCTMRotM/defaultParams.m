@@ -27,17 +27,18 @@ if (isempty(p.Results.defaultParams))
     % This is dimension specific
     switch obj.numMechanism
         case 1
-            params.weightL   = 75;
-            params.weightS   = 02;
-        case 2
             params.angle = 80;
+            params.minAxisRatio = 0;
+            params.scale = 1;
+        case 2
+            params.angle = 20;
             params.minAxisRatio = 0.03;
             params.scale = 1;
     end
     
     %% The exponential function
     params.amplitude = 0.4;
-    params.minLag    = 0.35;
+    params.minLag    = 0.15;
     
 else
     params = p.Results.defaultParams;
@@ -45,11 +46,13 @@ end
 
 switch obj.numMechanism
     case 1
-        paramsLb.weightL   = -100;
-        paramsLb.weightS   = -100;
-        
-        paramsUb.weightL  = 100;
-        paramsUb.weightS  = 100;
+        paramsLb.angle = -90;
+        paramsLb.minAxisRatio =0;
+        paramsLb.scale = 0;
+
+        paramsUb.angle = 90;
+        paramsUb.minAxisRatio = 0;
+        paramsUb.scale = 100;
     case 2
         paramsLb.angle = -90;
         paramsLb.minAxisRatio = 0.0001;
@@ -62,7 +65,7 @@ switch obj.numMechanism
 end
 
 %% Lower bounds
-paramsLb.amplitude = 0.0;
+paramsLb.amplitude = 0.001;
 paramsLb.minLag    = 0.15;
 
 

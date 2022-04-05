@@ -33,8 +33,8 @@ if (isempty(p.Results.defaultParams))
             
             
         case 2
-            params.weightL_1 = 5;
-            params.weightS_1 = 5;
+            params.weightL_1 = 7;
+            params.weightS_1 = 1;
             params.weight_M2 = 0.5;
     end
     

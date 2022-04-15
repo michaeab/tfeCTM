@@ -27,11 +27,11 @@ if (isempty(p.Results.defaultParams))
     % This is dimension specific
     switch obj.numMechanism
         case 1
-            params.angle = 80;
+            params.angle = 75;
             params.minAxisRatio = 0;
             params.scale = 1;
         case 2
-            params.angle = 20;
+            params.angle = 75;
             params.minAxisRatio = 0.03;
             params.scale = 1;
     end
@@ -65,12 +65,12 @@ switch obj.numMechanism
 end
 
 %% Lower bounds
-paramsLb.amplitude = 0.001;
+paramsLb.amplitude = 0.0001;
 paramsLb.minLag    = 0.15;
 
 
 %% Upper bounds
-paramsUb.amplitude = 1;
+paramsUb.amplitude = 100;
 paramsUb.minLag    = 1;
 
 

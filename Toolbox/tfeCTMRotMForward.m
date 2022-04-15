@@ -45,9 +45,8 @@ if (dimension == 2)
         m_hats = (R*E)'*stimuli;
     elseif  nMechanisms == 2
         R = deg2rotm(params(1));
-        E = [1 0; 0 params(2)];
+        E = [1 0; 0 1/params(2)];
         m_hats = (R*E)'*stimuli;
-        
     else
         error('Must be either 1 or 2 mechanisms');
     end

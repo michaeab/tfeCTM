@@ -1,18 +1,19 @@
-function [paramsFit,fVal,modelResponseStruct] = fitResponse(obj,thePacket,varargin)
-% [paramsFit,fVal,modelResponseStruct] = fitResponse(obj,thePacket,varargin)
+function [NRParams,fVal,modelResponseStruct] = fitResponse(obj,thePacket,varargin)
+% Fit method for the tfeNakaRushtonDirection class.
 %
-% Fit method for the tfeQCM class.  This overrides the tfe method, for the
-% main purpose of allowing us to have multiple starting points chosen
-% sensibly for the QCM model.
+% Syntax:
+%     [NRParams,fVal,modelResponseStruct] = fitResponse(obj,thePacket,varargin)
 %
-% Also eventually will allow us to put on some parameter constraints that
-% are not generic.
+% Descriptoin:
+%     This is a custom fit method because this object allows us to impose
+%     various constraints on the parameters across directions, and those
+%     are not implemented in the standard fit method of tfe or tfeQCM.
 %
 % Inputs:
 %   thePacket          - A valid packet
 %
 % Outputs:
-%   paramsFit          - Fit parameters
+%   NRParams           - Fit parameters
 %   fVal               - Fit error.
 %   predictedResponse  - Response predicted from fit
 %
@@ -34,6 +35,11 @@ function [paramsFit,fVal,modelResponseStruct] = fitResponse(obj,thePacket,vararg
 %                           the fitError's default value, Default here is
 %                           1000.
 %  
+
+% History;
+%  01/01/19  dhb   Take advantage of fact that tfe.fitResponse can now receive
+%                   constraints.
+
 %% Parse vargin for options passed here
 %
 % Setting 'KeepUmatched' to true means that we can pass the varargin{:})
@@ -42,43 +48,153 @@ function [paramsFit,fVal,modelResponseStruct] = fitResponse(obj,thePacket,vararg
 p = inputParser; p.KeepUnmatched = true; p.PartialMatching = false;
 p.addRequired('thePacket',@isstruct);
 p.addParameter('initialParams',[],@(x)(isempty(x) | isstruct(x)));
+p.addParameter('fminconAlgorithm','interior-point',@(x) (isempty(x) | ischar(x)));
 p.addParameter('fitErrorScalar',1000,@isnumeric);
-p.addParameter('fminconAlgorithm','active-set',@(x) (isempty(x) | ischar(x)));
 p.parse(thePacket,varargin{:});
 
-%% Initial parameters
-[initialParams,vlbParams,vubParams] = obj.defaultParams;
-if (~isempty(p.Results.initialParams))
-    initialParams = p.Results.initialParams;
-end   
-         
-% Some custom fitting
-if (obj.dimension == 2)
-    
-    % Setting the fitting flag allows the eventually called
-    % computeResponse routine to take some shortcuts that we
-    % don't want taken in general.  But we care enough about execution
-    % speed to do this.  Be sure to set stimuli back to empty when setting
-    % flag back to false.  The computeResponse routine will compute it when
-    % the fitting flag is true and it is empty.
-    obj.fitting = true; obj.stimuli = [];
-    [paramsFit,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:},...
-        'initialParams',initialParams,'vlbParams',vlbParams,'vubParams',vubParams,...
-        'fitErrorScalar',p.Results.fitErrorScalar,'fminconAlgorithm',p.Results.fminconAlgorithm);
-    %obj.fitting = false;
-    %obj.stimuli = [];
-   
-    % Use this to check error value as it sits here
-    fValCheck = obj.fitError(obj.paramsToVec(paramsFit),thePacket,varargin{:},'fitErrorScalar',p.Results.fitErrorScalar);
-    if (fValCheck ~= fVal)
-        error('Cannot compute the same fit error twice the same way. Check.');
-    end
-
+%% Check packet validity
+if (~obj.isPacket(thePacket))
+    error('The passed packet is not valid for this model');
 else
-     [paramsFit,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:});
-end   
-
+    switch (obj.verbosity)
+        case 'high'
+            fprintf('valid\n');
+    end
 end
 
+%% Set initial values and reasonable bounds on parameters
+[initialNRParams,vlbNRParams,vubNRParams] = obj.defaultParams;
+if (~isempty(p.Results.initialParams))
+    initialNRParams = p.Results.initialParams;
+end
 
+%% Set up search bounds
+ampLowBound = 0; ampHighBound = 5;
+semiLowBound = 0.005; semiHighBound = 10;
+expLowBound = 0.01; expHighBound = 10;
+expFalloffLowBound = initialNRParams.expFalloff;
+expFalloffHighBound = initialNRParams.expFalloff;
+noiseSdLowBound = initialNRParams.noiseSd;
+noiseSdHighBound = initialNRParams.noiseSd;
+if (obj.lockOffsetToZero)
+    % Lock initial value and bounds for offset to zero.
+    initialNRParams.crfOffset = 0;
+    offsetLowBound = initialNRParams.crfOffset;
+    offsetHighBound = initialNRParams.crfOffset;
+else
+    % The commented out code sets the initial value
+    % for the offset to the minimum response. Might
+    % be a good idea, but not sure and am leaving it
+    % commented out for right now.  Putting it in breaks
+    % t_QCMDirectionFit unless you do the same thing in
+    % routine tveQCMFitNakaRushtonDirectionsContrasts.
+    %
+    % minResponseValue = min(thePacket.response.values); 
+    % NRParams0.crfOffset = minResponseValue;
+     
+    % Standard bounds on offset
+    offsetLowBound = -ampHighBound;
+    offsetHighBound = ampHighBound;
+end
+
+% Pack bounds into vector form of parameters.
+for ii = 1:obj.nDirections
+    vlbNRParams(ii).crfAmp = ampLowBound;
+    vlbNRParams(ii).crfSemi = semiLowBound;
+    vlbNRParams(ii).crfExponent = expLowBound;
+    vlbNRParams(ii).crfOffset = offsetLowBound;
+    vlbNRParams(ii).expFalloff = expFalloffLowBound;
+    vlbNRParams(ii).noiseSd = noiseSdLowBound;
+end
+for ii = 1:obj.nDirections
+    vubNRParams(ii).crfAmp = ampHighBound;
+    vubNRParams(ii).crfSemi = semiHighBound;
+    vubNRParams(ii).crfExponent = expHighBound;
+    vubNRParams(ii).crfOffset = offsetHighBound;
+    vubNRParams(ii).expFalloff = expFalloffHighBound;
+    vubNRParams(ii).noiseSd = noiseSdHighBound;
+end
+
+%% Set up linear parameter constraints
+%
+% This is a little tricky. We need to know the order
+% of the parameters in the parameter vector, and then
+% we set 1,-1 pairs between the entries for the first
+% function and those for each subsequent function.
+%
+% I don't see any easy way around knowing the order in
+% which the parameters are packed into vectors here.
+tempvec = obj.paramsToVec(vlbNRParams(1));
+nParams = length(tempvec);
+if (obj.nDirections > 1)
+    % Build constraint matrix if there is more than one direction.
+    %
+    % Initialize
+    Aeq = [];
+    beq = [];
+    eqRowIndex = 1;
+    
+    % Common amplitude constraints
+    if (obj.commonAmplitude)
+        paramIndex = 1;
+        for ii = 2:obj.nDirections
+            Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
+            Aeq(eqRowIndex,paramIndex) = 1;
+            Aeq(eqRowIndex,(ii-1)*nParams+paramIndex) = -1;
+            beq(eqRowIndex) = 0;
+            eqRowIndex = eqRowIndex+1;
+        end
+    end
+    
+    % Common semi-saturation constant constraints
+    if (obj.commonSemi)
+        paramIndex = 2;
+        for ii = 2:obj.nDirections
+            Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
+            Aeq(eqRowIndex,paramIndex) = 1;
+            Aeq(eqRowIndex,(ii-1)*nParams+paramIndex) = -1;
+            beq(eqRowIndex) = 0;
+            eqRowIndex = eqRowIndex+1;
+        end
+    end
+    
+    % Common exponent constraints
+    if (obj.commonExp)
+        paramIndex = 3;
+        for ii = 2:obj.nDirections
+            Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
+            Aeq(eqRowIndex,paramIndex) = 1;
+            Aeq(eqRowIndex,(ii-1)*nParams+paramIndex) = -1;
+            beq(eqRowIndex) = 0;
+            eqRowIndex = eqRowIndex+1;
+        end
+    end
+    
+    % Common offset constraints
+    if (obj.commonOffset)
+        paramIndex = 4;
+        for ii = 2:obj.nDirections
+            Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
+            Aeq(eqRowIndex,paramIndex) = 1;
+            Aeq(eqRowIndex,(ii-1)*nParams+paramIndex) = -1;
+            beq(eqRowIndex) = 0;
+            eqRowIndex = eqRowIndex+1;
+        end
+    end
+else
+    % If there is only one independent direction, then there is no
+    % constraint across directions to be had.
+    Aeq = [];
+    beq = [];
+end
+
+%% Fit using tfe method
+[NRParams,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:},...
+        'initialParams',initialNRParams,'vlbParams',vlbNRParams,'vubParams',vubNRParams,...
+        'Aeq',Aeq,'beq',beq,...
+        'fminconAlgorithm',p.Results.fminconAlgorithm,...
+        'fitErrorScalar',p.Results.fitErrorScalar);
+
+end
+        
 

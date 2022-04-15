@@ -16,39 +16,18 @@ p.addParameter('PrintType','standard',@ischar);
 p.parse(params,varargin{:});
 params = p.Results.params;
 
-% Quadratic parameters
+% N-R parameters
 switch (p.Results.PrintType)
     case 'standard'
-        switch obj.dimension
-            case 2
-                if length(fieldnames(params)) == 4
-                    fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL,params.weightS);
-                elseif length(fieldnames(params)) == 5
-                    fprintf('Mechanism Angle: %0.2f, MAR: %0.2f, Scale: %0.2f\n',params.angle,params.minAxisRatio,params.scale);
-                elseif length(fieldnames(params)) == 6
-                    fprintf('Mechanism Weights: M1 -- L %0.2f, S %0.2f\n',params.weightL_1,params.weightS_1);
-                    fprintf('Mechanism Weights: M2 -- L %0.2f, S %0.2f\n',params.weightL_2,params.weightS_2);
-                else
-                    fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
-                end
-            case 3
-                if length(fieldnames(params)) ==4
-                    fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
-                elseif length(fieldnames(params)) == 5
-                    fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL,params.weightM, params.weightS);
-                    fprintf('Mechanism Weights: M2-- Scaling Value: %0.2f\n',params.weight_M2);
-                elseif length(fieldnames(params)) == 6
-                    fprintf('Mechanism Weights: M1 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_1,params.weightM_1, params.weightS_1);
-                    fprintf('Mechanism Weights: M2 -- L %0.2f, M %0.2f, S %0.2f\n',params.weightL_2,params.weightM_2, params.weightS_2);
-                else
-                    fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
-                end
+        for ii = 1:obj.nDirections
+            fprintf('Naka-Rushton parameters for direction %d\n',ii);
+            fprintf('\tCRF amplitude: %0.2f, CRF semi-saturation: %0.2f, CRF exponent: %0.2f, CRF offset: %0.2f\n',params(ii).crfAmp,params(ii).crfSemi,params(ii).crfExponent,params(ii).crfOffset);
+
         end
-        fprintf('Exponential Params: Amplitude = %0.2f,Min Lag = %0.2f\n',params.amplitude,params.minLag);
+        %fprintf('Exponential filter time constant: %0.2f\n',params.expFalloff);
         fprintf('\n');
     otherwise
-        error('Unknown parameter print type passed')
-        
+        error('Unknown parameter print type passed')    
 end
 
 

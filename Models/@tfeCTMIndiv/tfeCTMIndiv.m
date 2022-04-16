@@ -1,4 +1,4 @@
-classdef tfeNakaRushtonDirection < tfeQCM
+classdef tfeCTMIndiv < tfeCTM
 % tfeNakaRushtonDirection
 %  Create at tfeNakaRushtonDirection object
 %
@@ -69,7 +69,7 @@ classdef tfeNakaRushtonDirection < tfeQCM
     % but we put the constructor here.
     methods (Access=public)
         % Constructor
-        function obj = tfeNakaRushtonDirection(directions,varargin)
+        function obj = tfeCTMIndiv(directions,varargin)
            
             % Parse input. Need to add any key/value pairs that need to go
             % to the tfe parent class, as well as any that are QCM
@@ -84,13 +84,12 @@ classdef tfeNakaRushtonDirection < tfeQCM
             p.parse(directions,varargin{:});
             
             % Base class constructor
-            obj = obj@tfeQCM(varargin{:});
+            obj = obj@tfeCTM(varargin{:});
             
             % Set properties for this class
             obj.directions = directions;
             obj.dimension = size(directions,1);
             obj.nDirections = size(directions,2);
-            obj.lockOffsetToZero = p.Results.lockOffsetToZero;
             obj.commonAmplitude = p.Results.commonAmplitude;
             obj.commonSemi = p.Results.commonSemi;
             obj.commonExp = p.Results.commonExp;

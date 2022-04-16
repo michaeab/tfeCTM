@@ -70,49 +70,20 @@ end
 
 %% Set up search bounds
 ampLowBound = 0; ampHighBound = 5;
-semiLowBound = 0.005; semiHighBound = 10;
-expLowBound = 0.01; expHighBound = 10;
-expFalloffLowBound = initialNRParams.expFalloff;
-expFalloffHighBound = initialNRParams.expFalloff;
-noiseSdLowBound = initialNRParams.noiseSd;
-noiseSdHighBound = initialNRParams.noiseSd;
-if (obj.lockOffsetToZero)
-    % Lock initial value and bounds for offset to zero.
-    initialNRParams.crfOffset = 0;
-    offsetLowBound = initialNRParams.crfOffset;
-    offsetHighBound = initialNRParams.crfOffset;
-else
-    % The commented out code sets the initial value
-    % for the offset to the minimum response. Might
-    % be a good idea, but not sure and am leaving it
-    % commented out for right now.  Putting it in breaks
-    % t_QCMDirectionFit unless you do the same thing in
-    % routine tveQCMFitNakaRushtonDirectionsContrasts.
-    %
-    % minResponseValue = min(thePacket.response.values); 
-    % NRParams0.crfOffset = minResponseValue;
-     
-    % Standard bounds on offset
-    offsetLowBound = -ampHighBound;
-    offsetHighBound = ampHighBound;
-end
+minLagLowBound = 0.005; minLagBound = 10;
+scaleLowBound = 0.01; scaleHighBound = 10;
+
 
 % Pack bounds into vector form of parameters.
 for ii = 1:obj.nDirections
-    vlbNRParams(ii).crfAmp = ampLowBound;
-    vlbNRParams(ii).crfSemi = semiLowBound;
-    vlbNRParams(ii).crfExponent = expLowBound;
-    vlbNRParams(ii).crfOffset = offsetLowBound;
-    vlbNRParams(ii).expFalloff = expFalloffLowBound;
-    vlbNRParams(ii).noiseSd = noiseSdLowBound;
+    vlbNRParams(ii).amplitude = ampLowBound;
+    vlbNRParams(ii).minLag = minLagLowBound;
+    vlbNRParams(ii).scale = scaleLowBound;
 end
 for ii = 1:obj.nDirections
-    vubNRParams(ii).crfAmp = ampHighBound;
-    vubNRParams(ii).crfSemi = semiHighBound;
-    vubNRParams(ii).crfExponent = expHighBound;
-    vubNRParams(ii).crfOffset = offsetHighBound;
-    vubNRParams(ii).expFalloff = expFalloffHighBound;
-    vubNRParams(ii).noiseSd = noiseSdHighBound;
+    vubNRParams(ii).amplitude = ampHighBound;
+    vubNRParams(ii).minLag = minLagBound;
+    vubNRParams(ii).scale = scaleHighBound;
 end
 
 %% Set up linear parameter constraints

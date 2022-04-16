@@ -1,9 +1,9 @@
 classdef tfeCTMIndiv < tfeCTM
 % tfeNakaRushtonDirection
-%  Create at tfeNakaRushtonDirection object
+%  Create at tfeIndivDirection object
 %
 % Syntax:
-%    tfe = tfeNakaRushtonDirection(directions,varargin);
+%    tfe = tfeIndivDirection(directions,varargin);
 % 
 % Description:
 %     Implements a model that is quadratic in the color contrast of the
@@ -51,6 +51,7 @@ classdef tfeCTMIndiv < tfeCTM
         % Number of color directions.  We need to know this to set up
         % parameters.
         directions = [];
+        contrasts = [];
         nDirections = 1;
     end
     
@@ -69,25 +70,27 @@ classdef tfeCTMIndiv < tfeCTM
     % but we put the constructor here.
     methods (Access=public)
         % Constructor
-        function obj = tfeCTMIndiv(directions,varargin)
+        function obj = tfeCTMIndiv(directions,contrasts,varargin)
            
             % Parse input. Need to add any key/value pairs that need to go
             % to the tfe parent class, as well as any that are QCM
             % specific.
             p = inputParser; p.KeepUnmatched = true;
             p.addRequired('directions',@isnumeric);
+            p.addRequired('contrasts',@isnumeric);
             p.addParameter('lockOffsetToZero',false,@islogical);
             p.addParameter('commonAmplitude',false,@islogical);
             p.addParameter('commonSemi',false,@islogical);
             p.addParameter('commonExp',false,@islogical);
             p.addParameter('commonOffset',false,@islogical);
-            p.parse(directions,varargin{:});
+            p.parse(directions,contrasts,varargin{:});
             
             % Base class constructor
             obj = obj@tfeCTM(varargin{:});
             
             % Set properties for this class
             obj.directions = directions;
+            obj.contrasts = contrasts;
             obj.dimension = size(directions,1);
             obj.nDirections = size(directions,2);
             obj.commonAmplitude = p.Results.commonAmplitude;

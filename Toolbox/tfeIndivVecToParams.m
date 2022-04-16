@@ -23,7 +23,7 @@ function [NRParams,nParams] = tfeIndivVecToParams(paramsvec,nDirections)
 %
 
 % History:
-%   12/10/18  dhb  Header comments.
+%   04/16/22  mab  Header comments.
     
     % Number of parameters.  You just have to know this.  Coordinate
     % any changes with the tfeNRParamsToVec routine.
@@ -31,8 +31,8 @@ function [NRParams,nParams] = tfeIndivVecToParams(paramsvec,nDirections)
     
     % Unpack vector into struct array.
     for ii = 1:nDirections        
-        NRParams(ii).crfAmp = paramsvec((ii-1)*nParams+1);
-        NRParams(ii).crfSemi = paramsvec((ii-1)*nParams+2);
-        NRParams(ii).crfExponent = paramsvec((ii-1)*nParams+3);
+        NRParams(ii).amplitude = paramsvec((ii-1)*nParams+1);
+        NRParams(ii).minLag = paramsvec((ii-1)*nParams+2);
+        NRParams(ii).scale = paramsvec((ii-1)*nParams+3);
     end
 end

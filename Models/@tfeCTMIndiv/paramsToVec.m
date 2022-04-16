@@ -13,6 +13,6 @@ p.addRequired('params',@isstruct);
 p.parse(params,varargin{:});
 
 % Do it
-x = tfeNRParamsToVec(params);
+x = tfeIndivParamsToVec(params);
 
 end

@@ -15,6 +15,6 @@ p.parse(x,varargin{:});
 x = p.Results.x;
 
 % Do the conversion
-params = tfeNRVecToParams(x,obj.nDirections);
+params = tfeIndivVecToParams(x,obj.nDirections);
 
 end

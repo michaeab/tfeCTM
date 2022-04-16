@@ -17,40 +17,24 @@ p = inputParser; p.KeepUnmatched = true;
 p.addRequired('params',@isstruct);
 p.addRequired('stimulusStruct',@isstruct);
 p.addRequired('kernelStruct',@(x)(isempty(x) || isstruct(x)));
-p.addParameter('addNoise',false,@islogical);
 p.parse(params,stimulusStruct,kernelStruct,varargin{:});
 params = p.Results.params;
 
 %% Convert stimulus values to useful format
-switch obj.dimension
-    case 3
-        directions = stimulusStruct.values(1:3,:);
-        contrasts = stimulusStruct.values(4,:);
-    case 2
-        directions = stimulusStruct.values(1:2,:);
-        contrasts = stimulusStruct.values(3,:);
-end
+
+directions = atand(stimulusStruct.values(2,:)./stimulusStruct.values(1,:));
+contrasts = vecnorm(stimulusStruct.values);
 
 %% Figure out passed directions and make sure they match up with directions
 % this was initialized with.
-[indDirectionsTemp,directionIndices] = tfeQCMParseDirections(directions);
+[indDirectionsTemp,directionIndices] = tfeCTMParseDirections(directions);
 nIndDirections = size(indDirectionsTemp,2);
 
 %  NOTE: MB:  This needs to be changed to allows for unused directions but
 %  still checks for unkown directions. This applies to the number of
-%  indicies below 
+%  indicies below
 if (nIndDirections ~= obj.nDirections)
     error('Passed stimulus array does not have same number of directions as object');
-end
-
-%% Check on parameters
-for ii = 1:nIndDirections
-    if (abs(params(ii).noiseSd - params(1).noiseSd) > 1e-6)
-        error('Noise sd parameter not matched across directions in parameters struct array');
-    end
-    if (abs(params(ii).expFalloff - params(1).expFalloff) > 1e-6)
-        error('Exp falloff parameter not matched across directions in parameters struct array');
-    end
 end
 
 %% Match up directions found in stimuli with those that we have from initializtion
@@ -81,25 +65,13 @@ for ii = 1:nIndDirections
 end
 
 %% Get neural response from NR forward model
-neuralResponseCell = tfeNRForward(params,indDirectionContrasts);
-
-% Convert cell array for each direction back into form that matches passed
-% input.
-for ii = 1:nIndDirections
-    neuralResponse(indDirectionIndices{ii}) = neuralResponseCell{ii};
-end
+lagResponse = tfeCTMIndivForward(params,indDirectionContrasts);
 
 %% Make the neural response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;
-modelResponseStruct.values = neuralResponse;
+modelResponseStruct.values = lagResponse(:)';
 
 %% Optional, convolve with a passed kernel
 modelResponseStruct = obj.applyKernel(modelResponseStruct,kernelStruct,varargin{:});
-
-%% Optional, add noise
-if (p.Results.addNoise)
-    modelResponseStruct.values = modelResponseStruct.values + normrnd(0,params(1).noiseSd,size(modelResponseStruct.values));
-end
-
 
 end

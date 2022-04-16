@@ -1,4 +1,4 @@
-function [lagsFromParams] = tfeCTMIndivForward(params,stimuli,varargin)
+function [lagsFromParams] = tfeCTMIndivForward(paramsMat,contrasts,varargin)
 % Compute CTM forward model
 %
 % Synopsis
@@ -29,18 +29,18 @@ p = inputParser; p.KeepUnmatched = true;
 p.addRequired('params',@isvector);
 p.addRequired('stimuli',@ismatrix);
 p.addParameter('dimension',2,@isnumeric);
-p.addParameter('numMechanisms',2,@isnumeric);
 
-p.parse(params,stimuli,varargin{:});
-params = p.Results.params;
+p.parse(paramsMat,contrasts,varargin{:});
+paramsMat = p.Results.params;
 
 %% Get the ellipsoid parameters in cannonical form
 dimension   = p.Results.dimension;
 
-paramsMat = parmas;
+nDirections = size(paramsMat,2);
+
 if (dimension == 2)
   for ii = 1:nDirections
-      lagsFromParams(:,ii) = paramsMat(1,ii)*exp(-1 * contrast * paramsMat(2,ii)) + params(3,ii);
+      lagsFromParams(:,ii) = paramsMat(ii).amplitude *exp(-1 * contrasts{ii} * paramsMat(ii).scale) + paramsMat(ii).minLag;
   end
 elseif (dimension == 3)
     error('3 Dimension case to come');

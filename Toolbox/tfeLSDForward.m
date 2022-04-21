@@ -1,14 +1,14 @@
-function [lagsFromParams] = tfeCTMRotMForward(params,stimuli,varargin)
-% Compute CTM forward model
+function [pcFromParams] = tfeLSDForward(params,stimuli,varargin)
+% Compute LSD forward model
 %
 % Synopsis
-%    [responses,quadraticFactors] = tfeCTMForward(params,stimuli)
+%    [responses,quadraticFactors] = tfeLSDForward(params,stimuli)
 %
 % Description:
-%    Take stimuli and compute CTM responses.
+%    Take stimuli and compute CTM-LSD responses.
 %
 % Inputs:
-%      params        - CTM model parameter struct
+%      params        - CTM-LSD model parameter struct
 %      stimuli       - Stimuli, with stimulus contrasts in columns
 %
 % Outputs:
@@ -16,7 +16,7 @@ function [lagsFromParams] = tfeCTMRotMForward(params,stimuli,varargin)
 %
 
 % History:
-%   11/09/21  mab   wrote it (from tfeQCM template).
+%   04/20/22  mab   wrote it (from tfeQCM template).
 
 
 % When paramsToVec is working write a parameter check
@@ -60,7 +60,7 @@ else
 end
 
 % Convert mechanism output to lags
-lagsFromParams =  params(end-1) +  params(end).* exp(-1*m.*params(3));
+pcFromParams = 1 - exp(-((params(5).*m)./params(3)).^params(4));
 
 
 

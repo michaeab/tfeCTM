@@ -17,29 +17,17 @@ switch obj.numMechanism
     case 1
         % Take the parameter structure into a vector
         
-        x(1) = params.weightL;
-        x(2) = params.weightS;
-        x(3) = params.minLag;
-        x(4) = params.amplitude;
-        
-        
-        
-        % Optional inclusion of noise
-        if (p.Results.UseNoiseParam)
-            x(5) = params.noiseSd;
-        end
+        x(1) = params.angle;
+        x(2) = params.minAxisRatio;
+        x(3) = params.lambda;
+        x(4) = params.exponent;
+        x(5) = params.scale;
     case 2
-        x(1) = params.weightL_1;
-        x(2) = params.weightS_1;
-        x(3) = params.weightL_2;
-        x(4) = params.weightS_2;
-        x(5) = params.minLag;
-        x(6) = params.amplitude;
-        
-        % Optional inclusion of noise
-        if (p.Results.UseNoiseParam)
-            x(7) = params.noiseSd;
-        end
+        x(1) = params.angle;
+        x(2) = params.minAxisRatio;
+        x(3) = params.lambda;
+        x(4) = params.exponent;
+        x(5) = params.scale;
 end
 
 % transpose to match convention

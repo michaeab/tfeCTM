@@ -1,4 +1,4 @@
-classdef tfeCTM < tfe
+classdef tfeLSD < tfe
 % tfeQCM
 %  Create at tfeQCM (Quadratic Color Model) object
 %
@@ -59,7 +59,7 @@ classdef tfeCTM < tfe
     % but we put the constructor here.
     methods (Access=public)
         % Constructor
-        function obj = tfeCTM(varargin)
+        function obj = tfeLSD(varargin)
            
             % Parse input. Need to add any key/value pairs that need to go
             % to the tfe parent class, as well as any that are QCM

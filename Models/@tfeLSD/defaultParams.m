@@ -27,23 +27,19 @@ if (isempty(p.Results.defaultParams))
     % This is dimension specific
     switch obj.numMechanism
         case 1
-            params.weightL   = 75;
-            params.weightS   = 02;
-            
-            
-            
+            params.angle = 75;
+            params.minAxisRatio = 0;
+            params.scale = 1;
         case 2
-            params.weightL_1 = 75;
-            params.weightS_1 = 02;
-            params.weightL_2 = 24;
-            params.weightS_2 = 02;
+            params.angle = 75;
+            params.minAxisRatio = 0.03;
+            params.scale = 1;
 
-            
     end
     
     %% The exponential function
-    params.amplitude = 0.5;
-    params.minLag    = 0.3;
+    params.lambda    = 1;
+    params.exponent  = 4;
     
 else
     params = p.Results.defaultParams;
@@ -51,31 +47,33 @@ end
 
 switch obj.numMechanism
     case 1
-        paramsLb.weightL   = -100;
-        paramsLb.weightS   = -100;
-        
-        paramsUb.weightL  = 100;
-        paramsUb.weightS  = 100;
+        paramsLb.angle = -90;
+        paramsLb.minAxisRatio =0;
+        paramsLb.scale = 10^-6;
+
+
+        paramsUb.angle = 90;
+        paramsUb.minAxisRatio = 0;
+        paramsUb.scale = 100;
     case 2
-        paramsLb.weightL_1 = -100;
-        paramsLb.weightS_1 = -100;
-        paramsLb.weightL_2 = -100;
-        paramsLb.weightS_2 = -100;
-        
-        paramsUb.weightL_1 = 100;
-        paramsUb.weightS_1 = 100;
-        paramsUb.weightL_2 = 100;
-        paramsUb.weightS_2 = 100;
+        paramsLb.angle = -90;
+        paramsLb.minAxisRatio = 0.00001;
+        paramsLb.scale = 10^-6;
+
+        paramsUb.angle = 90;
+        paramsUb.minAxisRatio = 1;
+        paramsUb.scale = 10^2;
+
 end
 
 %% Lower bounds
-paramsLb.amplitude = 0;
-paramsLb.minLag    = 0.15;
+paramsLb.lambda    = 0.00001;
+paramsLb.exponent  = 0.00001;
 
 
 %% Upper bounds
-paramsUb.amplitude = 10;
-paramsUb.minLag    = 1;
+paramsUb.lambda      = 50;
+paramsUb.exponent    = 50;
 
 
 end

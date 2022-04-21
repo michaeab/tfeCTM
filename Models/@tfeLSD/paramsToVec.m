@@ -21,13 +21,14 @@ switch obj.numMechanism
         x(2) = params.minAxisRatio;
         x(3) = params.lambda;
         x(4) = params.exponent;
-        x(5) = params.scale;
+        x(5) = parmas.scale;
     case 2
         x(1) = params.angle;
         x(2) = params.minAxisRatio;
         x(3) = params.lambda;
         x(4) = params.exponent;
         x(5) = params.scale;
+
 end
 
 % transpose to match convention

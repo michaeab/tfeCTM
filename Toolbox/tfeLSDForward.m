@@ -60,7 +60,7 @@ else
 end
 
 % Convert mechanism output to lags
-pcFromParams = 1 - exp(-((params(5).*m)./params(3)).^params(4));
+pcFromParams = 1 - (1-params(5)).*exp(-(m./params(3)).^params(4));
 
 
 

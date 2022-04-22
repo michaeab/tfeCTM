@@ -21,13 +21,13 @@ switch obj.numMechanism
         params.minAxisRatio = x(2);
         params.lambda       = x(3);
         params.exponent     = x(4);
-        params.scale        = x(5);
+       
     case 2
         params.angle        = x(1);
         params.minAxisRatio = x(2);
         params.lambda       = x(3);
         params.exponent     = x(4);
-        params.scale        = x(5);
+      
 end
 
 end

@@ -29,16 +29,16 @@ if (isempty(p.Results.defaultParams))
         case 1
             params.angle = 75;
             params.minAxisRatio = 0;
-            params.scale = 0.5;
+            
         case 2
-            params.angle = 75;
-            params.minAxisRatio = 0.03;
-            params.scale = 0.5;
+            params.angle = 90;
+            params.minAxisRatio = 0.1;
+           
     end
     
     %% The exponential function
-    params.lambda    = 1;
-    params.exponent  = 4;
+    params.lambda    = .1;
+    params.exponent  = 2;
     
 else
     params = p.Results.defaultParams;
@@ -48,19 +48,18 @@ switch obj.numMechanism
     case 1
         paramsLb.angle = -90;
         paramsLb.minAxisRatio =0;
-        paramsLb.scale = 0;
-
+        
         paramsUb.angle = 90;
         paramsUb.minAxisRatio = 0;
-        paramsUb.scale = 1;
+       
     case 2
         paramsLb.angle = -90;
         paramsLb.minAxisRatio = 0.00001;
-        paramsLb.scale = 0;
+       
 
         paramsUb.angle = 90;
         paramsUb.minAxisRatio = 1;
-        paramsUb.scale = 1;
+        
 end
 
 %% Lower bounds

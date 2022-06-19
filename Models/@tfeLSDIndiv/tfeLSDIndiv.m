@@ -43,11 +43,9 @@ classdef tfeLSDIndiv < tfeCTM
     properties (SetAccess = private, GetAccess = public)
         % Fitting constraints
         lockOffsetToZero = false;
-        commonAmplitude = false;
-        commonSemi = false; 
-        commonExp = false;
-        commonOffset = false;
-        
+        commonLambda = false;
+        commonExponent = false; 
+
         % Number of color directions.  We need to know this to set up
         % parameters.
         directions = [];
@@ -70,7 +68,7 @@ classdef tfeLSDIndiv < tfeCTM
     % but we put the constructor here.
     methods (Access=public)
         % Constructor
-        function obj = tfeCTMIndiv(directions,contrasts,varargin)
+        function obj = tfeLSDIndiv(directions,contrasts,varargin)
            
             % Parse input. Need to add any key/value pairs that need to go
             % to the tfe parent class, as well as any that are QCM
@@ -79,10 +77,9 @@ classdef tfeLSDIndiv < tfeCTM
             p.addRequired('directions',@isnumeric);
             p.addRequired('contrasts',@isnumeric);
             p.addParameter('lockOffsetToZero',false,@islogical);
-            p.addParameter('commonAmplitude',false,@islogical);
-            p.addParameter('commonSemi',false,@islogical);
-            p.addParameter('commonExp',false,@islogical);
-            p.addParameter('commonOffset',false,@islogical);
+            p.addParameter('commonLambda',false,@islogical);
+            p.addParameter('commonExponent',false,@islogical);
+
             p.parse(directions,contrasts,varargin{:});
             
             % Base class constructor
@@ -93,10 +90,8 @@ classdef tfeLSDIndiv < tfeCTM
             obj.contrasts = contrasts;
             obj.dimension = size(directions,1);
             obj.nDirections = size(directions,2);
-            obj.commonAmplitude = p.Results.commonAmplitude;
-            obj.commonSemi = p.Results.commonSemi;
-            obj.commonExp = p.Results.commonExp;
-            obj.commonOffset = p.Results.commonOffset;
+            obj.commonLambda = p.Results.commonLambda;
+            obj.commonExponent = p.Results.commonExponent;
         end
     end 
     

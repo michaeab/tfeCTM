@@ -27,16 +27,15 @@ function indivParams = tfeIndivInitParams(obj)
 %   04/15/22  mab  Header comments.
 
 % Reasonable defaults
-amplitude = 1;
-minLag = 0.250;
-scale = 1.5;
+lambda = 1;
+exponent = 2;
+
 
 
 % Set up the struct array
 for ii = 1:obj.nDirections
-    indivParams(ii).amplitude = amplitude;
-    indivParams(ii).minLag = minLag;
-    indivParams(ii).scale = scale;
+    indivParams(ii).lambda = lambda;
+    indivParams(ii).exponent = exponent;
 end
 
 end

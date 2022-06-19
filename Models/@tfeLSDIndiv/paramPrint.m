@@ -24,7 +24,6 @@ switch (p.Results.PrintType)
             fprintf('\tLambda: %0.2f, Exponent: %0.2f\n',params(ii).lambda,params(ii).exponent);
 
         end
-        %fprintf('Exponential filter time constant: %0.2f\n',params.expFalloff);
         fprintf('\n');
     otherwise
         error('Unknown parameter print type passed')    

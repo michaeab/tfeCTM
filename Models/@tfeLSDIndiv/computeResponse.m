@@ -65,7 +65,7 @@ for ii = 1:nIndDirections
 end
 
 %% Get neural response from NR forward model
-lagResponse = tfeCTMIndivForward(params,indDirectionContrasts);
+lagResponse = tfeLSDIndivForward(params,indDirectionContrasts);
 
 %% Make the neural response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;

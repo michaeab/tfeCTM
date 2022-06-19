@@ -30,22 +30,10 @@ params = p.Results.params;
 
 
 %% Get neural response from CTM model
-lagResponse = tfeLSDForward(obj.paramsToVec(params),stimulusStruct.values);
+pcResponse = tfeLSDIndivForward(obj.paramsToVec(params),stimulusStruct.values);
 
 %% Make the response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;
-modelResponseStruct.values = lagResponse;
-
-
-%% Optional add noise
-if p.Results.addNoise
-    if ~isfield(params, 'noiseInverseFrequencyPower')
-        params.noiseInverseFrequencyPower=0;
-    end
-    cn = dsp.ColoredNoise(params.noiseInverseFrequencyPower,length(modelResponseStruct.timebase),1);
-    noise = step(cn)';
-    noise = noise/std(noise)*params.noiseSd;
-    modelResponseStruct.values = modelResponseStruct.values + noise;
-end
+modelResponseStruct.values = pcResponse;
 
 end

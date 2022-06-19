@@ -104,7 +104,7 @@ if (obj.nDirections > 1)
     eqRowIndex = 1;
     
     % Common amplitude constraints
-    if (obj.commonAmplitude)
+    if (obj.commonLambda)
         paramIndex = 1;
         for ii = 2:obj.nDirections
             Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
@@ -116,7 +116,7 @@ if (obj.nDirections > 1)
     end
     
     % Common semi-saturation constant constraints
-    if (obj.commonSemi)
+    if (obj.commonExponent)
         paramIndex = 2;
         for ii = 2:obj.nDirections
             Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
@@ -127,29 +127,7 @@ if (obj.nDirections > 1)
         end
     end
     
-    % Common exponent constraints
-    if (obj.commonExp)
-        paramIndex = 3;
-        for ii = 2:obj.nDirections
-            Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
-            Aeq(eqRowIndex,paramIndex) = 1;
-            Aeq(eqRowIndex,(ii-1)*nParams+paramIndex) = -1;
-            beq(eqRowIndex) = 0;
-            eqRowIndex = eqRowIndex+1;
-        end
-    end
-    
-    % Common offset constraints
-    if (obj.commonOffset)
-        paramIndex = 4;
-        for ii = 2:obj.nDirections
-            Aeq(eqRowIndex,:) = zeros(1,nParams*length(vlbNRParams'));
-            Aeq(eqRowIndex,paramIndex) = 1;
-            Aeq(eqRowIndex,(ii-1)*nParams+paramIndex) = -1;
-            beq(eqRowIndex) = 0;
-            eqRowIndex = eqRowIndex+1;
-        end
-    end
+
 else
     % If there is only one independent direction, then there is no
     % constraint across directions to be had.

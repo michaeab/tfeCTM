@@ -29,21 +29,19 @@ else
 end
 
 %% Set up search bounds
-ampLowBound = 0; ampHighBound = 5;
-minLagLowBound = 0.01; minLagHighBound = 10;
-scaleLowBound = 0.01; scaleHighBound = 3;
+lambdaLowBound = 0; lambdaHighBound = 5;
+expLowBound = 0.005; expHighBound = 10;
+
 
 
 % Pack bounds into vector form of parameters.
 for ii = 1:obj.nDirections
-    paramsLb(ii).amplitude = ampLowBound;
-    paramsLb(ii).minLag = minLagLowBound;
-    paramsLb(ii).scale = scaleLowBound;
+    paramsLb(ii).lambda = lambdaLowBound;
+    paramsLb(ii).exponent = expLowBound;
 end
 for ii = 1:obj.nDirections
-    paramsUb(ii).amplitude = ampHighBound;
-    paramsUb(ii).minLag = minLagHighBound;
-    paramsUb(ii).scale = scaleHighBound;
+    paramsUb(ii).lambda = lambdaHighBound;
+    paramsUb(ii).exponent = expHighBound;
 end
 
 end

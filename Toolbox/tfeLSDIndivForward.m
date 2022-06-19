@@ -1,4 +1,4 @@
-function [lagsFromParams] = tfeCTMIndivForward(paramsMat,contrasts,varargin)
+function [pcFromParams] = tfeLSDIndivForward(paramsMat,contrasts,varargin)
 % Compute CTM forward model
 %
 % Synopsis

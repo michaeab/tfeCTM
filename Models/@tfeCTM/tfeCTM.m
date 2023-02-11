@@ -35,6 +35,10 @@ classdef tfeCTM < tfe
         % Specify dimension of cone contrast space.  Can be 2 or 3.
         dimension = 3;
         
+        % Fitting constraints
+        lockAngle = false;
+        lockMAR   = false;
+
         % Specify number of mechanisms.  Can be 1 or 2.
         numMechanism = 1;
         
@@ -68,6 +72,7 @@ classdef tfeCTM < tfe
             p.addParameter('verbosity','none',@ischar);
             p.addParameter('dimension',3,@(x) (isnumeric(x) & isscalar(x)));
             p.addParameter('numMechanism',1,@(x) (isnumeric(x) & isscalar(x)));
+           
             p.parse(varargin{:});
             
             % Base class constructor
@@ -83,7 +88,8 @@ classdef tfeCTM < tfe
             if (obj.numMechanism ~= 1 & obj.numMechanism ~= 2)
                 error('Can only handle 1 or 2 mechanisms');
             end
-
+            obj.lockAngle = p.Results.lockAngle;
+            obj.lockMAR   = p.Results.lockMAR;
         end
     end 
     

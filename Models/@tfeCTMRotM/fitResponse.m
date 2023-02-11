@@ -33,7 +33,7 @@ function [paramsFit,fVal,modelResponseStruct] = fitResponse(obj,thePacket,vararg
 %                           option to the fitError method, but overrides
 %                           the fitError's default value, Default here is
 %                           1000.
-%  
+%
 %% Parse vargin for options passed here
 %
 % Setting 'KeepUmatched' to true means that we can pass the varargin{:})
@@ -44,17 +44,44 @@ p.addRequired('thePacket',@isstruct);
 p.addParameter('initialParams',[],@(x)(isempty(x) | isstruct(x)));
 p.addParameter('fitErrorScalar',1000,@isnumeric);
 p.addParameter('fminconAlgorithm','active-set',@(x) (isempty(x) | ischar(x)));
+p.addParameter('lockAngle',false,@islogical);
+p.addParameter('lockMAR',false,@islogical);
 p.parse(thePacket,varargin{:});
 
 %% Initial parameters
 [initialParams,vlbParams,vubParams] = obj.defaultParams;
 if (~isempty(p.Results.initialParams))
     initialParams = p.Results.initialParams;
-end   
-         
+end
+
+% fitting constraints
+lockAngle = p.Results.lockAngle;
+lockMAR   = p.Results.lockMAR;
+
 % Some custom fitting
 if (obj.dimension == 2)
-    
+
+    % LOCK THE PARAMTERS TO THE INITIAL PARAMS
+    if lockAngle
+        if ~isempty(p.Results.initialParams)
+            vubParams.angle = p.Results.initialParams.angle;
+            vlbParams.angle = p.Results.initialParams.angle;
+        else
+            error('Default params must be provided')
+        end
+    end
+
+    % Minor axis ratio bounds
+    if lockMAR
+        if ~isempty(p.Results.initialParams)
+            vubParams.minAxisRatio = p.Results.initialParams.minAxisRatio;
+            vlbParams.minAxisRatio = p.Results.initialParams.minAxisRatio;
+        else
+            error('Default params must be provided')
+        end
+    end
+
+
     % Setting the fitting flag allows the eventually called
     % computeResponse routine to take some shortcuts that we
     % don't want taken in general.  But we care enough about execution
@@ -67,7 +94,7 @@ if (obj.dimension == 2)
         'fitErrorScalar',p.Results.fitErrorScalar,'fminconAlgorithm',p.Results.fminconAlgorithm);
     %obj.fitting = false;
     %obj.stimuli = [];
-   
+
     % Use this to check error value as it sits here
     fValCheck = obj.fitError(obj.paramsToVec(paramsFit),thePacket,varargin{:},'fitErrorScalar',p.Results.fitErrorScalar);
     if (fValCheck ~= fVal)
@@ -75,8 +102,8 @@ if (obj.dimension == 2)
     end
 
 else
-     [paramsFit,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:});
-end   
+    [paramsFit,fVal,modelResponseStruct] = fitResponse@tfe(obj,thePacket,varargin{:});
+end
 
 end
 

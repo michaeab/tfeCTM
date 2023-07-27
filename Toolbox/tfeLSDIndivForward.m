@@ -40,7 +40,7 @@ nDirections = size(paramsMat,2);
 
 if (dimension == 2)
   for ii = 1:nDirections 
-      pcFromParams(:,ii) = 1 - (1 - 0.5).*exp(-(contrasts{ii}./paramsMat(ii).lambda).^paramsMat(ii).exponent);
+      pcFromParams(:,ii) = 1 - (1 - 0.5).*exp(-(contrasts(ii)./paramsMat(ii).lambda).^paramsMat(ii).exponent);
   end
 elseif (dimension == 3)
     error('3 Dimension case to come');

@@ -30,7 +30,9 @@ params = p.Results.params;
 
 
 %% Get neural response from CTM model
-pcResponse = tfeLSDIndivForward(obj.paramsToVec(params),stimulusStruct.values);
+% pcResponse = tfeLSDIndivForward(obj.paramsToVec(params),stimulusStruct.values);
+
+pcResponse = tfeLSDForward(obj.paramsToVec(params),stimulusStruct.values);
 
 %% Make the response structure
 modelResponseStruct.timebase = stimulusStruct.timebase;

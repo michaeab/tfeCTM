@@ -36,7 +36,7 @@ switch (p.Results.PrintType)
                 %                     fprintf('UNKNOWN PARAMS: the number of params passed is not yet set up' );
                 %                 end
         end
-        fprintf('Nonlinearity Params: lambda = %0.2f,exponent= %0.2f\n',params.lambda,params.exponent);
+        fprintf('Nonlinearity Params: lambda = %0.2f, exponent = %0.2f\n',params.lambda,params.exponent);
         fprintf('\n');
     otherwise
         error('Unknown parameter print type passed')
